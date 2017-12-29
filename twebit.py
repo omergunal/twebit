@@ -1,5 +1,16 @@
+import tweepy
+import json
+from tweepy import Stream
+from tweepy import OAuthHandler
+from tweepy.streaming import StreamListener
 from textblob.classifiers import NaiveBayesClassifier
 from textblob import TextBlob
+
+#consumer key, consumer secret, access token, access secret.
+consumerKey="XXXX"
+consumerSecret="XXXX"
+accessToken="XXXX-XXXX"
+accessSecret="XXXX"
 
 train = []
 for i in open('data/pos.txt'): # get train data from pos.txt and neg.txt
