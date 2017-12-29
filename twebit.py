@@ -2,9 +2,9 @@ from textblob.classifiers import NaiveBayesClassifier
 from textblob import TextBlob
 
 train = []
-for i in open('pos.txt'): # get train data from pos.txt and neg.txt
+for i in open('data/pos.txt'): # get train data from pos.txt and neg.txt
         train.append([i.rstrip('\n'), 'pos'])
-for j in open('neg.txt'):
+for j in open('data/neg.txt'):
         train.append([j.rstrip('\n'), 'neg'])
 
 test = [
