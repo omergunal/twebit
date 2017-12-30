@@ -18,15 +18,11 @@ for i in open('data/pos.txt'): # get train data from pos.txt and neg.txt
 for j in open('data/neg.txt'):
         train.append([j.rstrip('\n'), 'neg'])
 
-test = [
-    ('i love mining', 'pos'),
-    ("This means the value of Bitcoin is going up soon AGAIN", 'pos'),
-    ("Israel regulator seeks to ban #bitcoin firms from stock exchange", 'neg'),
-    #("Bitcoin prices stabilize as cryptoassets' values climb towards a new record", 'pos'),
-    ('bitcoin is great', 'pos'),
-    ("i think bitcoin is a bubble", 'neg'),
-    ("I can't believe I'm doing this.", 'neg')
-]
+test = []
+for z in open('data/test/testPos.txt'): # get test data from testPos.txt and testNeg.txt
+    test.append([z.rstrip('\n'), 'pos'])
+for x in open('data/test/testNeg.txt'):
+    test.append([x.rstrip('\n'), 'neg'])
 
 cl = NaiveBayesClassifier(train)
 
