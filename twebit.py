@@ -33,7 +33,8 @@ class listener(StreamListener):
         all_data = json.loads(data)
         tweet = all_data["text"]
         analysis = TextBlob(tweet)
-        print(tweet,cl.classify(tweet))
+        if analysis.detect_language() == 'en':
+           print(tweet,cl.classify(tweet))
         time.sleep(0.3)
         return True
 
