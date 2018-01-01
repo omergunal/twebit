@@ -26,8 +26,31 @@ for x in open('data/test/testNeg.txt'):
 
 cl = NaiveBayesClassifier(train)
 
-# Classify some text
+class listener(StreamListener):
+
+    def on_data(self, data):
+
+        all_data = json.loads(data)
+        tweet = all_data["text"]
+        analysis = TextBlob(tweet)
+        print(tweet,cl.classify(tweet))
+        time.sleep(0.3)
+        return True
+
+    def on_error(self, status):
+        print (status)
+
+auth = OAuthHandler(consumerKey, consumerSecret)
+auth.set_access_token(accessToken, accessSecret)
+
+while True:
+    twitterStream = Stream(auth, listener())
+    twitterStream.filter(track=["bitcoin"], async = True)
+    time.sleep(60)
+    twitterStream.disconnect()
+
+'''# Classify some text
 print(cl.classify("bitcoin is rising to $20000"))  # "pos"
 print(cl.classify("Bitcoin is a big bubble"))   # "neg"
 
-print(cl.accuracy(test))
+print(cl.accuracy(test))'''
