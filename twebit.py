@@ -1,3 +1,4 @@
+
 from textblob.classifiers import NaiveBayesClassifier
 from textblob import TextBlob
 from tweepy import Stream
@@ -11,7 +12,11 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import nltk
 import re
+import numpy as np
+import matplotlib.pyplot as plt
+
 nltk.download('stopwords')
+nltk.download('punkt')
 
 consumerKey="XXXX"
 consumerSecret="XXXX"
@@ -21,14 +26,31 @@ accessSecret="XXXX"
 stop_words = set(stopwords.words('english'))
 
 class listener(StreamListener):
+    x = 0
+    y = 0
     def on_data(self, data):
         all_data = json.loads(data)
         tweet = all_data["text"]
+        tweet = re.sub(r"http\S+", "", tweet)
         analysis = TextBlob(tweet)
-        if analysis.detect_language() == 'en':
-            print(tweet,cl.classify(tweet))
+        try:
+            if analysis.detect_language() == 'en':
+                print(tweet,cl.classify(tweet))
+                try:
+                    if cl.classify(tweet) == 'pos':
+                        listener.y += 1
+                    else:
+                        listener.y -= 1
+                    plt.ion()
+                    listener.x += 1
+                    plt.scatter(listener.x,listener.y)
+                    plt.pause(0.05)
+                except:
+                    pass
+        except:
+            pass
         time.sleep(0.3)
-        return True
+        return(True)
     def on_error(self, status):
         print (status)
 
@@ -54,12 +76,12 @@ def main():
     cl = NaiveBayesClassifier(train)
 
     while True: # get tweets from twitter
-        #cl.show_informative_features(5)
         print(cl.accuracy(test))
         twitterStream = Stream(auth, listener())
         twitterStream.filter(track=["bitcoin"], async = True)
         time.sleep(60)
         twitterStream.disconnect()
+
 
 if __name__ == "__main__":
     main()
