@@ -14,14 +14,12 @@ import nltk
 import re
 import numpy as np
 import matplotlib.pyplot as plt
-
 nltk.download('stopwords')
-nltk.download('punkt')
 
-consumerKey="XXXX"
-consumerSecret="XXXX"
-accessToken="XXXX-XXXX"
-accessSecret="XXXX"
+consumerKey="xxxx"
+consumerSecret="xxxx"
+accessToken="xxxx-xxxx"
+accessSecret="xxxx"
 
 stop_words = set(stopwords.words('english'))
 
@@ -36,17 +34,16 @@ class listener(StreamListener):
         try:
             if analysis.detect_language() == 'en':
                 print(tweet,cl.classify(tweet))
-                try:
-                    if cl.classify(tweet) == 'pos':
-                        listener.y += 1
-                    else:
-                        listener.y -= 1
-                    plt.ion()
-                    listener.x += 1
-                    plt.scatter(listener.x,listener.y)
-                    plt.pause(0.05)
-                except:
+                if cl.classify(tweet) == 'pos':
+                    listener.y += 1
+                elif cl.classify(tweet) == 'neut':
                     pass
+                else:
+                    listener.y -= 1
+                plt.ion()
+                listener.x += 1
+                plt.scatter(listener.x,listener.y)
+                plt.pause(0.05)
         except:
             pass
         time.sleep(0.3)
@@ -69,6 +66,8 @@ def main():
     test = []
     getData('data/pos.txt', 'pos',train) #get data from txt file
     getData('data/neg.txt', 'neg',train)
+    getData('data/neut.txt', 'neut',train)
+    getData('data/test/testNeut.txt', 'neut',test)
     getData('data/test/testPos.txt', 'pos', test)
     getData('data/test/testNeg.txt', 'neg', test)
 
@@ -76,12 +75,12 @@ def main():
     cl = NaiveBayesClassifier(train)
 
     while True: # get tweets from twitter
+        #cl.show_informative_features(5)
         print(cl.accuracy(test))
         twitterStream = Stream(auth, listener())
-        twitterStream.filter(track=["bitcoin"], async = True)
-        time.sleep(60)
+        twitterStream.filter(track=["bitcoin"], async = True, stall_warnings=True)
+        time.sleep(6000) # check
         twitterStream.disconnect()
-
 
 if __name__ == "__main__":
     main()
