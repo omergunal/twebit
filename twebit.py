@@ -14,7 +14,9 @@ import nltk
 import re
 import numpy as np
 import matplotlib.pyplot as plt
+
 nltk.download('stopwords')
+nltk.download('punkt')
 
 consumerKey="xxxx"
 consumerSecret="xxxx"
@@ -31,9 +33,12 @@ class listener(StreamListener):
         tweet = all_data["text"]
         tweet = re.sub(r"http\S+", "", tweet)
         analysis = TextBlob(tweet)
+        stop_words = set(['the', 'and', 'a', 'RT'])
+        filtered_words = set(analysis.words) - stop_words
+        print(filtered_words)
         try:
             if analysis.detect_language() == 'en':
-                print(tweet,cl.classify(tweet))
+                print(tweet,cl.classify(filtered_words))
                 if cl.classify(tweet) == 'pos':
                     listener.y += 1
                 elif cl.classify(tweet) == 'neut':
@@ -75,7 +80,7 @@ def main():
     cl = NaiveBayesClassifier(train)
 
     while True: # get tweets from twitter
-        #cl.show_informative_features(5)
+        cl.show_informative_features(5)
         print(cl.accuracy(test))
         twitterStream = Stream(auth, listener())
         twitterStream.filter(track=["bitcoin"], async = True, stall_warnings=True)
