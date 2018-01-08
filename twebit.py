@@ -15,15 +15,15 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 
-nltk.download('stopwords')
-nltk.download('punkt')
-
 consumerKey="xxxx"
 consumerSecret="xxxx"
 accessToken="xxxx-xxxx"
-accessSecret="xxxx"
+accessSecret="xxxxx"
 
-stop_words = set(stopwords.words('english'))
+stopwords = []
+for i in open("stopwords.txt"):
+    sword = i.rstrip('\n')
+    stopwords.append(sword)
 
 class listener(StreamListener):
     x = 0
@@ -33,11 +33,13 @@ class listener(StreamListener):
         tweet = all_data["text"]
         tweet = re.sub(r"http\S+", "", tweet)
         analysis = TextBlob(tweet)
-        stop_words = set(['the', 'and', 'a', 'RT'])
-        filtered_words = set(analysis.words) - stop_words
-        print(filtered_words)
+        stop_words = set(stopwords)
+        filtered_words = set(analysis.words) - stop_words # remove stop words from tweet
+        for i in set(filtered_words): # remove @ tags
+            if i[:1] == '@':
+                set(filtered_words).remove(i)
         try:
-            if analysis.detect_language() == 'en':
+            if analysis.detect_language() == 'en': # english tweets
                 print(tweet,cl.classify(filtered_words))
                 if cl.classify(tweet) == 'pos':
                     listener.y += 1
@@ -51,6 +53,7 @@ class listener(StreamListener):
                 plt.pause(0.05)
         except:
             pass
+
         time.sleep(0.3)
         return(True)
     def on_error(self, status):
@@ -61,7 +64,7 @@ def getData(filename,group,arr): # add data to array
             example_sent = i.rstrip('\n') # read txt file
             example_sent = re.sub(r"http\S+", "", example_sent) # remove url
             word_tokens = word_tokenize(example_sent)
-            filtered_sentence = [w for w in word_tokens if not w in stop_words] # filter stop words
+            filtered_sentence = [w for w in word_tokens if not w in stopwords] # filter stop words
             arr.append([filtered_sentence, group])
 
 def main():
