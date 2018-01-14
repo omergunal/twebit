@@ -34,7 +34,7 @@ class listener(StreamListener):
         tweet = re.sub(r"http\S+", "", tweet)
         analysis = TextBlob(tweet)
         stop_words = set(stopwords)
-        filtered_words = set(analysis.words) - stop_words # remove stop words from tweet
+        filtered_words = set(analysis.words.lower()) - stop_words # remove stop words from tweet
         for i in set(filtered_words): # remove @ tags
             if i[:1] == '@':
                 set(filtered_words).remove(i)
@@ -64,7 +64,7 @@ def getData(filename,group,arr): # add data to array
             example_sent = i.rstrip('\n') # read txt file
             example_sent = re.sub(r"http\S+", "", example_sent) # remove url
             word_tokens = word_tokenize(example_sent)
-            filtered_sentence = [w for w in word_tokens if not w in stopwords] # filter stop words
+            filtered_sentence = [w.lower() for w in word_tokens if not w in stopwords] # filter stop words
             arr.append([filtered_sentence, group])
 
 def main():
