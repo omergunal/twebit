@@ -64,7 +64,7 @@ def getData(filename,group,arr): # add data to array
             example_sent = i.rstrip('\n') # read txt file
             example_sent = re.sub(r"http\S+", "", example_sent) # remove url
             word_tokens = word_tokenize(example_sent)
-            filtered_sentence = [w.lower() for w in word_tokens if not w in stopwords] # filter stop words
+            filtered_sentence = [w.lower() for w in word_tokens if not w.lower() in stopwords] # filter stop words
             arr.append([filtered_sentence, group])
 
 def main():
