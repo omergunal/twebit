@@ -15,6 +15,8 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 
+nltk.download('punkt')
+
 consumerKey="xxxx"
 consumerSecret="xxxx"
 accessToken="xxxx-xxxx"
@@ -24,6 +26,9 @@ stopwords = []
 for i in open("stopwords.txt"):
     sword = i.rstrip('\n')
     stopwords.append(sword)
+
+global check
+check = []
 
 class listener(StreamListener):
     x = 0
@@ -40,17 +45,23 @@ class listener(StreamListener):
                 set(filtered_words).remove(i)
         try:
             if analysis.detect_language() == 'en': # english tweets
-                print(tweet,cl.classify(filtered_words))
-                if cl.classify(tweet) == 'pos':
-                    listener.y += 1
-                elif cl.classify(tweet) == 'neut':
-                    pass
+                if analysis not in check:
+                    print(tweet,cl.classify(filtered_words))
+                    check.append(analysis)
+                    if len(check) > 10:
+                        del check[:]
+                    if cl.classify(tweet) == 'pos':
+                        listener.y += 1
+                    elif cl.classify(tweet) == 'neut':
+                        pass
+                    else:
+                        listener.y -= 1
+                    plt.ion()
+                    listener.x += 1
+                    plt.scatter(listener.x,listener.y)
+                    plt.pause(0.05)
                 else:
-                    listener.y -= 1
-                plt.ion()
-                listener.x += 1
-                plt.scatter(listener.x,listener.y)
-                plt.pause(0.05)
+                    pass
         except:
             pass
 
