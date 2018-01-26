@@ -1,19 +1,17 @@
-
+import time
+import json
+import tweepy
+import nltk
+import re
+import numpy as np
+import matplotlib.pyplot as plt
 from textblob.classifiers import NaiveBayesClassifier
 from textblob import TextBlob
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
-import time
-import json
-from textblob import TextBlob
-import tweepy
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-import nltk
-import re
-import numpy as np
-import matplotlib.pyplot as plt
 
 nltk.download('punkt')
 
