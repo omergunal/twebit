@@ -44,7 +44,7 @@ class listener(StreamListener):
         try:
             if analysis.detect_language() == 'en': # english tweets
                 if analysis not in check:
-                    print(tweet,cl.classify(filtered_words))
+                    print("[{}] , [{}]".format(tweet,cl.classify(filtered_words)))
                     check.append(analysis)
                     if len(check) > 10:
                         del check[:]
