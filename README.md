@@ -20,5 +20,6 @@ python3 twebit.py
 ```
 
 ### ScreenShots
+![graph1](https://github.com/omergunal/twebit/blob/master/img/graph1.png)
 ![graph](https://github.com/omergunal/twebit/blob/master/img/graph.png)
 ![btc](https://github.com/omergunal/twebit/blob/master/img/btc.png)
